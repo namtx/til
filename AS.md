@@ -89,3 +89,43 @@ def upload(key, io, checksum: nil)
   end
 end
 ```
+
+## How `ActiveStorage` generate url for a file when upload done?
+`ActiveStorage` use store service to generate the `URL` for file
+
+#### S3
+```ruby
+def url(key, expires_in:, filename:, disposition:, content_type:)
+  ...
+    generated_url = object_for(key)...
+
+    generated_url
+  ...
+end
+```
+`S3` will handle expiration for us.
+
+#### Disk is more complex
+- How to implements `expires_in`?
+When you request the `image`, it will send to `ActiveStorage::DiskController` with `params[:encoded_key]`, and `ActiveStorage` use these key to find out the key of image.
+This key contains `expires_in` value, so only image which is **fresh** will be return or `ActiveStorage::DiskController` will return `:not_found`.
+
+But what happen when show image `http://localhost:3000/users/3`, `ActiveStorage` will generate a new URL with new `expires_in`
+
+https://github.com/rails/rails/blob/master/activestorage/app/controllers/active_storage/blobs_controller.rb#L12
+
+
+For more information about how `Rails` encrypt the message with `expires_in`: https://medium.com/@michaeljcoyne/rails-5-2-metadata-options-for-messageverifier-and-messageencryptor-79540de86f9b
+
+
+# Variants
+
+`ActiveStorage` supports image transform with `ImageMagick`, just add `gem mini_magick` to application's `Gemfile`.
+
+
+Processed image will be saved into `storage/va/ri/variants/:original_key/:Digest::SHA256.hexdigest(variation.key)`
+https://github.com/rails/rails/blob/master/activestorage/app/models/active_storage/variant.rb#L71
+
+`upload` and `download` are just like `Blob`
+
+# Preview
