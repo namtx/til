@@ -1,0 +1,27 @@
+name: Issues to blog post workflow
+
+on:
+  issues:
+    types: [opened, edited]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Issues to blog post action
+        uses: namtx/issues-to-blog@0.0.2
+        with:
+          targetRepository: thinkspace
+          targetBranch: master
+          targetDirectory: _posts
+          sourceRepository: til
+          accessToken: ${{ secrets.GITHUB_TOKEN }}
