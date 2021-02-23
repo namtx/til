@@ -24,4 +24,4 @@ jobs:
           targetBranch: master
           targetDirectory: _posts
           sourceRepository: til
-          accessToken: ${{ secrets.GITHUB_TOKEN }}
+          accessToken: ${{ secrets.ACCESS_TOKEN }}
