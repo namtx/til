@@ -18,7 +18,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Issues to blog post action
-        uses: namtx/issues-to-blog@0.05
+        uses: namtx/issues-to-blog@0.0.6
         with:
           targetRepository: thinkspace
           targetBranch: master
